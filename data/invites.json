@@ -1,0 +1,36 @@
+[
+  {
+    "brideName": "Divya",
+    "groomName": "Mani",
+    "weddingDate": "January 24, 2026",
+    "venue": "The Grand Regal, Mumbai",
+    "events": [
+      {
+        "title": "Sangeet",
+        "date": "1st January",
+        "time": "7:00 PM Onwards",
+        "location": "The Ballroom, Grand Regal",
+        "description": "A night of music and dance to celebrate our union."
+      },
+      {
+        "title": "Wedding Ceremony",
+        "date": "3rd January",
+        "time": "10:30 AM Onwards",
+        "location": "Garden Deck, Grand Regal",
+        "description": "The main ceremony following traditional rituals."
+      },
+      {
+        "title": "Reception",
+        "date": "5th January",
+        "time": "8:00 PM Onwards",
+        "location": "Main Hall, Grand Regal",
+        "description": "Dinner and celebration with family and friends."
+      }
+    ],
+    "gallery": [],
+    "theme": {
+      "primaryColor": "#910101",
+      "accentColor": "#e9b234"
+    }
+  }
+]

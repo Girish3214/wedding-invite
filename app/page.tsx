@@ -1,65 +1,134 @@
-import Image from "next/image";
+"use client";
+
+import React, { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import GaneshLoader from "@/components/GaneshLoader";
+import { AnimatePresence, motion } from "framer-motion";
+
+function WeddingContent() {
+  const searchParams = useSearchParams();
+  const bride = searchParams.get("bride");
+  const groom = searchParams.get("groom");
+
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!bride || !groom) {
+      setError(
+        "Please provide bride and groom names in the URL (e.g., /?bride=Kavya&groom=Vaibhav)",
+      );
+      setLoading(false);
+      return;
+    }
+
+    const fetchData = async () => {
+      const startTime = Date.now();
+      try {
+        const response = await fetch(
+          `/api/invite?bride=${bride}&groom=${groom}`,
+        );
+        if (!response.ok) {
+          throw new Error("Invitation not found or server error.");
+        }
+        const result = await response.json();
+        setData(result);
+
+        // Add a slight delay for the visual experience
+        const elapsed = Date.now() - startTime;
+        const minimumLoadTime = 5000;
+        const delay = Math.max(0, minimumLoadTime - elapsed);
+        setTimeout(() => setLoading(false), delay);
+      } catch (err: any) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [bride, groom]);
+
+  return (
+    <main className="min-h-screen relative bg-black">
+      <AnimatePresence>{loading && <GaneshLoader />}</AnimatePresence>
+
+      <div className="content-container py-20">
+        {error ? (
+          <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+            <h2 className="text-3xl text-primary mb-4 font-heading">
+              Om Ganeshay Namah
+            </h2>
+            <p className="text-muted-foreground">{error}</p>
+          </div>
+        ) : data ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
+            {/* Hero Section */}
+            <div className="flex flex-col items-center text-center space-y-8 mb-20">
+              <span className="text-accent uppercase tracking-[0.3em] font-medium text-sm">
+                Save the Date
+              </span>
+              <h1 className="text-6xl md:text-8xl text-primary font-heading italic">
+                {data.brideName}{" "}
+                <span className="text-3xl align-middle mx-4 not-italic font-body">
+                  &
+                </span>{" "}
+                {data.groomName}
+              </h1>
+              <p className="text-xl max-w-2xl font-body text-foreground/80 leading-relaxed">
+                With the blessings of Lord Ganesh, we invite you to celebrate
+                our union on {data.weddingDate}.
+              </p>
+            </div>
+
+            {/* Event Details */}
+            <div className="bg-black grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {data.events?.map((event: any, idx: number) => (
+                <div
+                  key={idx}
+                  className="bg-black p-8 border border-accent/20 rounded-3xl group hover:border-primary/40 transition-all bg-[#fffdfa] shadow-sm hover:shadow-xl"
+                >
+                  <h3 className="text-2xl text-primary mb-2 font-heading italic">
+                    {event.title}
+                  </h3>
+                  <p className="font-bold text-accent mb-4">
+                    {event.date} | {event.time}
+                  </p>
+                  <p className="text-foreground/70">{event.location}</p>
+                  <p className="mt-4 text-sm italic text-muted-foreground">
+                    {event.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* RSVP Section */}
+            <div className="mt-32 p-12 bg-primary text-white rounded-[3rem] text-center">
+              <h2 className="text-4xl md:text-5xl font-heading italic mb-6">
+                Will you join us?
+              </h2>
+              <p className="mb-10 text-white/80 max-w-md mx-auto">
+                Please RSVP by June 1st to help us prepare for our celebration.
+              </p>
+              <button className="bg-accent hover:bg-white hover:text-primary text-primary font-bold px-12 py-4 rounded-full transition-all transform hover:scale-110 active:scale-95">
+                RSVP NOW
+              </button>
+            </div>
+          </motion.div>
+        ) : null}
+      </div>
+    </main>
+  );
+}
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <Suspense fallback={<GaneshLoader />}>
+      <WeddingContent />
+    </Suspense>
   );
 }
