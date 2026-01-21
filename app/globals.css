@@ -1,13 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #910101;
+  --color-primary: #71473e;
   --color-accent: #e9b234;
-  --color-background: #ffffff;
-  --color-foreground: #171717;
+  --color-background: #eaded4;
+  --color-foreground: #3f2e29;
+  --color-card: rgba(255, 255, 255, 0.4);
+  --color-buttons: #71473e;
+  --color-text-dark: #3f2e29;
 
   --font-heading: "Playfair Display", serif;
-  --font-body: "Open Sans", sans-serif;
+  --font-body: var(--font-poppins), sans-serif;
+  --font-cookie: var(--font-cookie), cursive;
 
   --radius-lg: 1.5rem;
   --radius-md: 1rem;
@@ -16,7 +20,30 @@
 
 @layer base {
   body {
-    @apply bg-background text-foreground font-body antialiased;
+    @apply bg-background text-foreground font-body antialiased relative min-h-screen;
+    background-image: url("/texture-bg.png"), url("/paper-texture.png");
+    background-size:
+      400px 400px,
+      400px 400px;
+    background-repeat: repeat, repeat;
+    background-blend-mode: multiply, multiply;
+    opacity: 1;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("/texture-bg.png"), url("/paper-texture.png");
+    background-size:
+      400px 400px,
+      400px 400px;
+    background-repeat: repeat, repeat;
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: -1;
   }
   h1,
   h2,

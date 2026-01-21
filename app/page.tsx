@@ -50,7 +50,7 @@ function WeddingContent() {
   }, [bride, groom]);
 
   return (
-    <main className="min-h-screen relative bg-black">
+    <main className="min-h-screen relative bg-background text-foreground">
       <AnimatePresence>{loading && <GaneshLoader />}</AnimatePresence>
 
       <div className="content-container py-20">
@@ -69,12 +69,12 @@ function WeddingContent() {
           >
             {/* Hero Section */}
             <div className="flex flex-col items-center text-center space-y-8 mb-20">
-              <span className="text-accent uppercase tracking-[0.3em] font-medium text-sm">
+              <span className="text-primary uppercase tracking-[0.3em] font-medium text-sm">
                 Save the Date
               </span>
-              <h1 className="text-6xl md:text-8xl text-primary font-heading italic">
+              <h1 className="text-6xl md:text-8xl text-foreground font-cookie">
                 {data.brideName}{" "}
-                <span className="text-3xl align-middle mx-4 not-italic font-body">
+                <span className="text-3xl align-middle mx-4 not-italic font-body text-primary">
                   &
                 </span>{" "}
                 {data.groomName}
@@ -86,16 +86,16 @@ function WeddingContent() {
             </div>
 
             {/* Event Details */}
-            <div className="bg-black grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {data.events?.map((event: any, idx: number) => (
                 <div
                   key={idx}
-                  className="bg-black p-8 border border-accent/20 rounded-3xl group hover:border-primary/40 transition-all bg-[#fffdfa] shadow-sm hover:shadow-xl"
+                  className="p-8 border border-primary/10 rounded-3xl group hover:border-primary/40 transition-all bg-card shadow-sm hover:shadow-xl"
                 >
                   <h3 className="text-2xl text-primary mb-2 font-heading italic">
                     {event.title}
                   </h3>
-                  <p className="font-bold text-accent mb-4">
+                  <p className="font-bold text-foreground mb-4">
                     {event.date} | {event.time}
                   </p>
                   <p className="text-foreground/70">{event.location}</p>
@@ -104,19 +104,6 @@ function WeddingContent() {
                   </p>
                 </div>
               ))}
-            </div>
-
-            {/* RSVP Section */}
-            <div className="mt-32 p-12 bg-primary text-white rounded-[3rem] text-center">
-              <h2 className="text-4xl md:text-5xl font-heading italic mb-6">
-                Will you join us?
-              </h2>
-              <p className="mb-10 text-white/80 max-w-md mx-auto">
-                Please RSVP by June 1st to help us prepare for our celebration.
-              </p>
-              <button className="bg-accent hover:bg-white hover:text-primary text-primary font-bold px-12 py-4 rounded-full transition-all transform hover:scale-110 active:scale-95">
-                RSVP NOW
-              </button>
             </div>
           </motion.div>
         ) : null}
