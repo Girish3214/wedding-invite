@@ -10,8 +10,7 @@ export async function getInviteByNames(bride: string, groom: string) {
 
     return invites.find(
       (inv: any) =>
-        inv.brideName.toLowerCase() === bride.toLowerCase() &&
-        inv.groomName.toLowerCase() === groom.toLowerCase(),
+        inv.slug.toLowerCase() === `${bride}-${groom}`.toLowerCase(),
     );
   } catch (error) {
     console.error("Error reading database:", error);
